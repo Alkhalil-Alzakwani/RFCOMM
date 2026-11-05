@@ -1,0 +1,2 @@
+# Optional and platform-dependent; only required for --transport bluetooth.
+PyBluez>=0.23

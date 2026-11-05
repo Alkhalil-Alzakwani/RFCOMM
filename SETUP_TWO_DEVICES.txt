@@ -1,0 +1,107 @@
+BLUETOOTH TERMINAL CHAT - TWO-DEVICE SETUP
+==========================================
+
+This guide covers a real Bluetooth connection between two computers. The
+application uses Bluetooth Classic RFCOMM; it does not use Wi-Fi or the mock
+transport. Bluetooth support depends on the operating system and a compatible
+PyBluez installation. In particular, PyBluez is not straightforward to install
+on every Windows/Python combination.
+
+WHAT YOU NEED
+-------------
+
+- Two computers with Bluetooth Classic support and Bluetooth enabled.
+- Python 3.10 or newer installed on both computers.
+- This project copied to both computers (at least bluetooth_chat.py).
+- A compatible PyBluez package installed on both computers.
+- Permission in each operating system to discover and connect to Bluetooth
+  devices. Pair the computers in the OS Bluetooth settings if the OS requires
+  pairing before RFCOMM connections.
+
+SET UP BOTH COMPUTERS
+---------------------
+
+1. Copy the project folder to each computer.
+2. Open a terminal in the project folder on each computer.
+3. Check Python is available:
+
+       python --version
+
+   If your system uses the Python launcher instead, use "py" in place of
+   "python" in the commands below.
+4. Install the Bluetooth dependency on both computers:
+
+       python -m pip install -r requirements.txt
+
+   This installs PyBluez. If installation fails, find a PyBluez build
+   compatible with your operating system and Python version. The program
+   cannot use real Bluetooth until the "bluetooth" Python module can be
+   imported on both computers.
+5. Turn on Bluetooth and make both computers discoverable/available in their
+   operating system Bluetooth settings. Pair the computers there if prompted.
+   Keep both computers close enough for Bluetooth.
+
+START A CHAT
+------------
+
+1. On BOTH computers, start the app from the project folder:
+
+       python bluetooth_chat.py
+
+   Keep both terminals open. The app starts listening and advertises the
+   "CWI Bluetooth Chat" RFCOMM service on channel 3 by default.
+2. On the computer that will initiate the connection, type:
+
+       discover
+
+   Wait for the scan to finish. The other computer should appear by name and
+   Bluetooth address. If it does not, check that its app is still running and
+   Bluetooth discovery is enabled.
+3. Connect using the exact device name or address shown by discover:
+
+       connect <device-name-or-address>
+
+   For example:
+
+       connect OFFICE-PC
+
+   Device names with spaces can be entered as shown. If names are ambiguous,
+   use the Bluetooth address instead. The app reports success when connected.
+4. Type a message and press Enter. It is sent to the selected device. On the
+   receiving computer, the message appears in that computer's terminal.
+5. To connect the other way as well, run discover and connect from the second
+   computer too. Each side can then initiate a separate connection.
+6. Use these commands as needed:
+
+       devices
+       send <device-id> <message>
+       broadcast <message>
+       help
+       quit
+
+   "device-id" is the Bluetooth address printed by "devices". Plain text goes
+   to the currently selected connection; "use <device-id>" changes the
+   selection. "broadcast" sends to all connected devices.
+
+TROUBLESHOOTING
+---------------
+
+- "No ... service found": confirm the other computer is running
+  "python bluetooth_chat.py", Bluetooth is enabled, the devices are in range,
+  and required pairing/permissions have been granted.
+- No devices appear after "discover": make the other computer discoverable in
+  its OS settings and check that Bluetooth is enabled on both devices.
+- PyBluez import/install or listener errors: PyBluez support varies by OS and
+  Python version. Install a compatible build and allow Bluetooth access in OS
+  settings. The mock mode does not test a real Bluetooth connection.
+- To check the CLI without Bluetooth hardware or PyBluez, run:
+
+       python bluetooth_chat.py --transport mock
+
+  Then type "discover", "connect Mock Echo Peer (simulated)", and a message.
+  The simulated echo is only a local demo, not communication with the other
+  computer.
+
+Both ends must use compatible versions of this application. Messages are
+exchanged using this app's JSON-line protocol, so it is not a general-purpose
+Bluetooth terminal for unrelated chat applications.
