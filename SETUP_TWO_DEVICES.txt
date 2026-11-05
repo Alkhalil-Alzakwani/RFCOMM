@@ -29,6 +29,14 @@ SET UP BOTH COMPUTERS
 
    If your system uses the Python launcher instead, use "py" in place of
    "python" in the commands below.
+   If PowerShell says Python was not found or opens the Microsoft Store, use
+   the full path to the installed Python executable instead. For example, a
+   uv-managed installation may be at:
+
+       & "$HOME\.local\bin\python3.15.exe" --version
+
+   Replace "python" in the commands below with:
+   & "full\path\to\python.exe"
 4. Install the Bluetooth dependency on both computers:
 
        python -m pip install -r requirements.txt
