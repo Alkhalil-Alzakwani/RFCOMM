@@ -53,3 +53,4 @@ protected by a lock. `DeviceManager` supports multiple simultaneous peers.
 ```text
 python -m unittest -v
 ```
+///
